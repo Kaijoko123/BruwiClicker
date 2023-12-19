@@ -1,0 +1,53 @@
+plugins{
+    id 'java'
+    id 'application'
+}
+
+
+
+application {
+    mainClass = "BruwiClicker"
+}
+
+jar
+        {
+            manifest {
+                attributes(
+                        'Main-Class': "BruwiClicker"
+                )
+            }
+        }
+
+group = 'io.github.kaijoko123'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.register('buildBruwiClicker', Jar)
+        {
+            System.out.println("Building editor...")
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            //classifier = 'all'
+
+            manifest{
+                attributes(
+                        'Main-Class': "BruwiClicker"
+                )
+            }
+            from {
+                configurations.runtimeClasspath.collect {it.isDirectory() ? it:zipTree(it)}
+            }
+            with jar
+            System.out.println("Finsihed building editor!")
+        }
